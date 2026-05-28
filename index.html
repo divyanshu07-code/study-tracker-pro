@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STUDY TRACKER CORE v3.0 - ADVANCED ARCHITECTURE</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, Arial, sans-serif;
+    }
+
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+      --green: #10b981;
+      --red: #f43f5e;
+      --blue: #3b82f6;
+      --orange: #f97316;
+      --purple: #8b5cf6;
+      --btn-primary-bg: #0f172a;
+      --btn-primary-text: #ffffff;
+      --kanban-bg: #f8fafc;
+      --accent: rgba(59, 130, 246, 0.1);
+      --drag-over: rgba(59, 130, 246, 0.05);
+    }
+
+    body.dark {
+      --bg: #030712;
+      --card: #0b0f19;
+      --text: #f3f4f6;
+      --muted: #94a3b8;
+      --border: #1e293b;
+      --btn-primary-bg: #f3f4f6;
+      --btn-primary-text: #030712;
+      --kanban-bg: #070a13;
+      --accent: rgba(59, 130, 246, 0.2);
+      --drag-over: rgba(243, 244, 246, 0.05);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1750px;
+      margin: auto;
+      padding: 40px 30px;
+    }
+
+    .glow-bg {
+      position: absolute;
+      top: -10%;
+      right: -5%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, rgba(0,0,0,0) 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .logo h1 {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, var(--text) 60%, var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo p {
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      padding: 12px 22px;
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+      border-color: var(--muted);
+    }
+
+    .btn.active {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .primary {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border: none;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 28px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+    }
+
+    .card.blue-deck::before { background: var(--blue); }
+    .card.green-deck::before { background: var(--green); }
+    .card.purple-deck::before { background: var(--purple); }
+    .card.orange-deck::before { background: var(--orange); }
+
+    .card-title {
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-value {
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      gap: 30px;
+    }
+
+    .main-panel, .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: 32px;
+      padding: 30px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+
+    .inputs {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 0.8fr auto;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    input, select {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--blue);
+      background: var(--card);
+      box-shadow: 0 0 0 4px var(--accent);
+    }
+
+    .filter-toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-toolbar select, .filter-toolbar input {
+      padding: 10px 14px;
+      font-size: 13px;
+      border-radius: 12px;
+      width: auto;
+    }
+
+    .view-container {
+      min-height: 250px;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .kanban-col {
+      background: var(--kanban-bg);
+      border-radius: 24px;
+      padding: 20px;
+      min-height: 500px;
+      border: 1px solid var(--border);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .kanban-col.drag-over {
+      background: var(--drag-over);
+      border-color: var(--blue);
+    }
+
+    .kanban-col h3 {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .kanban-col h3 span {
+      background: var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+    }
+
+    .kanban-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 420px;
+    }
+
+    .task {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: grab;
+      position: relative;
+    }
+
+    .task:active { cursor: grabbing; }
+    .task.dragging { opacity: 0.4; transform: scale(0.98); }
+
+    .task-row-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .task-title { font-size: 17px; font-weight: 700; line-height: 1.4; }
+    .completed .task-title { text-decoration: line-through; opacity: 0.4; }
+
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag { padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: capitalize; }
+
+    .high { background: #fee2e2; color: #b91c1c; }
+    body.dark .high { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .medium { background: #fef3c7; color: #92400e; }
+    body.dark .medium { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .low { background: #dcfce7; color: #166534; }
+    body.dark .low { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+    .time-budget-bar { width: 100%; height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; margin-top: 4px; }
+    .time-budget-fill { height: 100%; background: var(--purple); width: 0%; transition: width 0.3s; }
+
+    .subtask-wrapper { background: var(--bg); padding: 12px 16px; border-radius: 16px; margin-top: 4px; }
+    .subtask-item { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 13px; font-weight: 600; }
+    .subtask-item input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+    .subtask-input-group { display: flex; gap: 8px; margin-top: 8px; }
+    .subtask-input-group input { padding: 8px 12px; font-size: 12px; border-radius: 10px; width: 100%; }
+
+    .task-buttons { display: flex; gap: 8px; justify-content: flex-end; width: 100%; }
+    .task-buttons button { border: none; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 13px; }
+    .complete-btn { background: var(--blue); color: white; }
+    .delete-btn { background: var(--red); color: white; }
+
+    .progress { margin-top: 30px; }
+    .progress-bg { width: 100%; height: 16px; background: var(--border); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--green), #06b6d4); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    .timer-container { position: relative; width: 220px; height: 220px; margin: 25px auto; }
+    .timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .timer-circle-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+    .timer-circle-prog { fill: none; stroke: var(--blue); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 565; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
+    .timer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 44px; font-weight: 900; letter-spacing: -1px; }
+
+    .pomodoro-modes { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
+    .mode-btn { padding: 8px 14px; font-size: 12px; border-radius: 20px; }
+    .mode-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+    .timer-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; font-size: 13px; font-weight: 600; color: var(--muted); align-items: flex-start; padding-left: 10px; width: 100%; }
+    .volume-control { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 5px; }
+    .volume-control input[type="range"] { flex: 1; cursor: pointer; }
+    #visualizer { width: 100%; height: 40px; background: var(--bg); border-radius: 12px; margin-top: 10px; }
+
+    .heatmap { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .box { aspect-ratio: 1; border-radius: 8px; transition: transform 0.2s; cursor: pointer; }
+    .box:hover { transform: scale(1.15); z-index: 2; }
+    .level0 { background: var(--border); }
+    .level1 { background: #bbf7d0; }
+    .level2 { background: #4ade80; }
+    .level3 { background: #10b981; }
+
+    .toast { position: fixed; bottom: 30px; right: 30px; background: #0f172a; color: white; padding: 16px 24px; border-radius: 20px; opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000; border: 1px solid #334155; font-weight: 700; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    body.dark .toast { background: #f3f4f6; color: #030712; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .chart-container { width: 100%; position: relative; }
+    canvas#chart { width: 100%; height: 300px; background: var(--kanban-bg); border-radius: 24px; padding: 20px; border: 1px solid var(--border); }
+
+    .history-item { padding: 14px; border-radius: 18px; background: var(--bg); border: 1px solid var(--border); margin-bottom: 12px; font-size: 14px; font-weight: 600; }
+    .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+    .file-input-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+
+    @media(max-width: 1400px) { .layout { grid-template-columns: 1fr; } }
+    @media(max-width: 950px) { .inputs { grid-template-columns: 1fr; } .kanban-board { grid-template-columns: 1fr; } }
+  </style>
+</head>
+
+<body class="dark">
+
+  <div class="glow-bg"></div>
+  <div class="toast" id="toast"></div>
+
+  <div class="container">
+    <div class="topbar">
+      <div class="logo">
+        <h1>STUDY TRACKER</h1>
+        <p>Transactional Database Architecture & High-Definition Control Workspace</p>
+      </div>
+      <div class="top-actions">
+        <button class="btn" onclick="toggleTheme()">🌓 Theme Engine</button>
+        <button class="btn" onclick="exportCSV()">📊 Export CSV Matrix</button>
+        <button class="btn" onclick="exportJSON()">💾 Backup Config JSON</button>
+        <div class="file-input-wrapper">
+          <button class="btn">📂 Restore Config</button>
+          <input type="file" id="importFile" onchange="importJSON(event)">
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard">
+      <div class="card blue-deck">
+        <div class="card-title">Indexed Database Nodes</div>
+        <div class="card-value" id="totalTasks">0</div>
+      </div>
+      <div class="card green-deck">
+        <div class="card-title">Verified Completions</div>
+        <div class="card-value" id="completedTasks">0</div>
+      </div>
+      <div class="card purple-deck">
+        <div class="card-title">Cycles Composed</div>
+        <div class="card-value" id="sessions">0</div>
+      </div>
+      <div class="card orange-deck">
+        <div class="card-title">Efficiency Metric Vector</div>
+        <div class="card-value" id="productivity">0%</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="main-panel">
+        <div class="panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap:15px;">
+            <h2>Dynamic Task Data Streams</h2>
+            <div>
+              <button class="btn active" style="padding: 6px 14px; font-size:12px; border-radius:20px;" id="listViewBtn" onclick="switchView('list')">List Architecture</button>
+              <button class="btn" style="padding: 6px 14px; font-size:12px; border-radius:20px;" id="kanbanViewBtn" onclick="switchView('kanban')">Kanban Kanban Space</button>
+            </div>
+          </div>
+          
+          <div class="inputs">
+            <input type="text" id="taskInput" placeholder="Specify technical criteria context...">
+            <input type="date" id="dueDate">
+            <input type="text" id="subject" placeholder="Module Workspace / Tag">
+            <select id="priority">
+              <option value="low">Low Priority</option>
+              <option value="medium" selected>Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+            <input type="number" id="estimatedPomos" min="1" max="10" value="1" placeholder="Est. Pomos">
+            <button class="btn primary" onclick="addTask()">Deploy Node</button>
+          </div>
+
+          <div class="filter-toolbar">
+            <input type="text" id="searchInput" placeholder="Query indexed text arrays..." onkeyup="renderTasks()" style="flex:2;">
+            <select id="filterSubject" onchange="renderTasks()">
+              <option value="all">All Workspace Spaces</option>
+            </select>
+            <select id="filterPriority" onchange="renderTasks()">
+              <option value="all">All Priorities</option>
+              <option value="low">Low Level</option>
+              <option value="medium">Medium Level</option>
+              <option value="high">High Level</option>
+            </select>
+            <select id="sortCriteria" onchange="renderTasks()">
+              <option value="none">No Structural Sort</option>
+              <option value="date">Target Due Date</option>
+              <option value="priority">Priority Weight</option>
+            </select>
+          </div>
+          
+          <div class="view-container" id="viewContainer"></div>
+
+          <div class="progress">
+            <div class="progress-bg">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p style="margin-top:12px; color:var(--muted); font-size: 14px; font-weight: 700;">
+              System Execution Threshold Balance: <span id="progressText">0%</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Chronology Frequency Array Matrix Map (Last 35 Computational Run Loops)</h2>
+          <div style="margin-bottom: 15px; font-size: 12px; color: var(--muted); font-weight: 600; margin-top:5px;">
+            Heat Density Keys: <span style="color:var(--border)">■</span> 0 Units Logged | <span style="color:#bbf7d0">■</span> 1-2 Units | <span style="color:#4ade80">■</span> 3-4 Units | <span style="color:#10b981">■</span> 5+ Run Clusters
+          </div>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+
+        <div class="panel" id="chartParentContainer">
+          <h2>High-Definition Vector Velocity Stream Analysis</h2>
+          <div class="chart-container">
+            <canvas id="chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-panel">
+        <div class="panel" style="text-align: center;">
+          <h2>Modular Focus Pomo Engine</h2>
+          
+          <div class="pomodoro-modes" style="margin-top: 15px;">
+            <button class="btn mode-btn active" id="mode-work" onclick="setTimerMode('work')">Work Cycle</button>
+            <button class="btn mode-btn" id="mode-short" onclick="setTimerMode('short')">Short Relaxation</button>
+            <button class="btn mode-btn" id="mode-long" onclick="setTimerMode('long')">Extended Break</button>
+          </div>
+
+          <div class="timer-options">
+            <label><input type="checkbox" id="soundToggle" checked> Audio Signal Core</label>
+            <label style="margin-top:5px; display:inline-block; width: 100%; text-align: left;">
+              📻 Ambient Generator:
+              <select id="ambientSound" onchange="toggleAmbientNoise()" style="padding:4px 8px; font-size:11px; margin-left:5px; border-radius:8px; width: auto; display: inline-block;">
+                <option value="none">Disabled</option>
+                <option value="white">Static White Loop</option>
+                <option value="pink">Deep Pink Focus</option>
+                <option value="osc">Focus Drone Synthesis</option>
+              </select>
+            </label>
+            <div class="volume-control">
+              <span>🔈</span>
+              <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.3" oninput="updateVolume()">
+              <span>🔊</span>
+            </div>
+            <canvas id="visualizer" width="300" height="40"></canvas>
+          </div>
+
+          <div class="timer-container">
+            <svg class="timer-svg">
+              <circle class="timer-circle-bg" cx="110" cy="110" r="90"></circle>
+              <circle class="timer-circle-prog" id="timerCircle" cx="110" cy="110" r="90"></circle>
+            </svg>
+            <div class="timer" id="timer">25:00</div>
+          </div>
+
+          <div class="timer-buttons" style="display: flex; gap: 8px; justify-content: center;">
+            <button class="btn primary" onclick="startTimer()">Initialize System Block</button>
+            <button class="btn" onclick="pauseTimer()">Halt Stream</button>
+            <button class="btn" onclick="resetTimer()">Reset Register</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Predictive Telemetry Profiling</h2>
+          <div class="insight" id="insight" style="font-weight:600; line-height:1.6;">Aggregating cluster history configurations...</div>
+        </div>
+
+        <div class="panel">
+          <h2>Cognitive Catalyst Variable</h2>
+          <div class="quote" id="quote" style="font-style: italic; font-weight:600; line-height:1.6;"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Real-Time Activity Ledger Logs</h2>
+          <div id="history"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // System Architecture Config Data Elements
+    let db = null;
+    let tasks = [];
+    let history = [];
+    let sessionCount = 0;
+    let studyData = {};
+    let currentView = 'list';
+
+    // Timer Variables
+    let timerDuration = 25 * 60;
+    let time = 25 * 60;
+    let timer = null;
+    let activeMode = 'work';
+
+    // Web Audio Synthesizer Controls
+    let audioCtx = null;
+    let mainGainNode = null;
+    let ambientNode = null;
+    let visualizerAnim = null;
+
+    const quotes = [
+      "Discipline automatically generates long-term mechanical freedom.",
+      "Marginal architectural iteration compounds daily across datasets.",
+      "Consistency reliably overpowers erratic motivation vectors.",
+      "Isolate active criteria dependencies. Process focused data streams only."
+    ];
+    document.getElementById("quote").innerText = quotes[Math.floor(Math.random() * quotes.length)];
+
+    const colors = ["#dbeafe", "#dcfce7", "#fce7f3", "#ede9fe", "#fef3c7", "#fee2e2"];
+    const textColors = ["#1d4ed8", "#166534", "#be185d", "#6d28d9", "#92400e", "#b91c1c"];
+
+    // ADVANCED ARCHITECTURE LAYER: Async Database (IndexedDB Pipeline Engine)
+    function initDatabase(callback) {
+      const request = indexedDB.open("NexusCoreDatabase", 1);
+      
+      request.onupgradeneeded = function(e) {
+        let databaseInstance = e.target.result;
+        if (!databaseInstance.objectStoreNames.contains("system_state")) {
+          databaseInstance.createObjectStore("system_state", { keyPath: "id" });
+        }
+      };
+
+      request.onsuccess = function(e) {
+        db = e.target.result;
+        loadSystemStateFromDB(callback);
+      };
+
+      request.onerror = function() {
+        toast("Database Connection Crash. Reverting to memory mode.");
+        callback();
+      };
+    }
+
+    function loadSystemStateFromDB(callback) {
+      const transaction = db.transaction(["system_state"], "readonly");
+      const store = transaction.objectStore("system_state");
+      const getReq = store.get("core_state");
+
+      getReq.onsuccess = function() {
+        if (getReq.result) {
+          tasks = getReq.result.tasks || [];
+          history = getReq.result.history || [];
+          sessionCount = getReq.result.sessionCount || 0;
+          studyData = getReq.result.studyData || {};
+          currentView = getReq.result.currentView || 'list';
+        } else {
+          currentView = localStorage.getItem("ultra_preferredView") || 'list';
+          studyData = JSON.parse(localStorage.getItem("ultra_studyData")) || {};
+        }
+        callback();
+      };
+      getReq.onerror = function() { callback(); };
+    }
+
+    function saveStateToDatabase() {
+      if (!db) return;
+      const transaction = db.transaction(["system_state"], "readwrite");
+      const store = transaction.objectStore("system_state");
+      store.put({
+        id: "core_state",
+        tasks: tasks,
+        history: history,
+        sessionCount: sessionCount,
+        studyData: studyData,
+        currentView: currentView
+      });
+    }
+
+    function toast(msg) {
+      const el = document.getElementById("toast");
+      el.innerText = msg;
+      el.classList.add("show");
+      setTimeout(() => { el.classList.remove("show"); }, 3000);
+    }
+
+    function switchView(viewType) {
+      currentView = viewType;
+      document.getElementById("listViewBtn").classList.remove("active");
+      document.getElementById("kanbanViewBtn").classList.remove("active");
+      
+      if(viewType === 'list') document.getElementById("listViewBtn").classList.add("active");
+      else document.getElementById("kanbanViewBtn").classList.add("active");
+      
+      saveStateToDatabase();
+      renderTasks();
+    }
+
+    function setTimerMode(mode) {
+      activeMode = mode;
+      pauseTimer();
+      document.getElementById("mode-work").classList.remove("active");
+      document.getElementById("mode-short").classList.remove("active");
+      document.getElementById("mode-long").classList.remove("active");
+      document.getElementById(`mode-${mode}`).classList.add("active");
+
+      if (mode === 'work') timerDuration = 25 * 60;
+      else if (mode === 'short') timerDuration = 5 * 60;
+      else if (mode === 'long') timerDuration = 15 * 60;
+
+      time = timerDuration;
+      updateTimerDisplay();
+    }
+
+    function addTask() {
+      const text = document.getElementById("taskInput").value;
+      if (text.trim() === "") return;
+
+      const dueDate = document.getElementById("dueDate").value;
+      const subject = document.getElementById("subject").value.trim() || "General Ops";
+      const priority = document.getElementById("priority").value;
+      const estimatedPomos = parseInt(document.getElementById("estimatedPomos").value) || 1;
+      const colorIndex = Math.floor(Math.random() * colors.length);
+
+      tasks.unshift({
+        id: 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        text,
+        dueDate,
+        subject,
+        priority,
+        estimatedPomos,
+        actualPomos: 0,
+        completed: false,
+        status: 'todo', 
+        subtasks: [],
+        colorIndex
+      });
+
+      document.getElementById("taskInput").value = "";
+      document.getElementById("subject").value = "";
+      document.getElementById("priority").value = "medium";
+      document.getElementById("estimatedPomos").value = "1";
+
+      saveStateToDatabase();
+      populateSubjectDropdownFilter();
+      renderTasks();
+      toast("Objective Node Tracked in DB Matrix");
+    }
+
+    function populateSubjectDropdownFilter() {
+      const drop = document.getElementById("filterSubject");
+      const currentSelection = drop.value;
+      drop.innerHTML = '<option value="all">All Workspace Spaces</option>';
+      
+      let set = new Set();
+      tasks.forEach(t => { if(t.subject) set.add(t.subject); });
+      set.forEach(subj => { drop.innerHTML += `<option value="${subj}">${subj}</option>`; });
+      drop.value = currentSelection;
+    }
+
+    function addSubtask(taskId) {
+      const inputEl = document.getElementById(`subInput_${taskId}`);
+      if (!inputEl || inputEl.value.trim() === "") return;
+
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        task.subtasks.push({
+          id: 'sub_' + Date.now(),
+          text: inputEl.value.trim(),
+          completed: false
+        });
+        saveStateToDatabase();
+        renderTasks();
+      }
+    }
+
+    function toggleSubtask(taskId, subtaskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (task) {
+        const sub = task.subtasks.find(s => s.id === subtaskId);
+        if (sub) sub.completed = !sub.completed;
+        saveStateToDatabase();
+        renderTasks();
+      }
+    }
+
+    function updateTaskStatus(taskId, nextStatus) {
+      const index = tasks.findIndex(t => t.id === taskId);
+      if (index === -1) return;
+
+      tasks[index].status = nextStatus;
+      if(nextStatus === 'done' && !tasks[index].completed) {
+        tasks[index].completed = true;
+        tasks[index].subtasks.forEach(s => s.completed = true);
+        logExecutionHistory(tasks[index].text);
+      } else if (nextStatus !== 'done') {
+        tasks[index].completed = false;
+      }
+
+      saveStateToDatabase();
+      renderTasks();
+    }
+
+    function logExecutionHistory(taskText) {
+      history.unshift({ text: taskText, date: new Date().toLocaleString() });
+      const today = new Date().toISOString().split("T")[0];
+      studyData[today] = (studyData[today] || 0) + 1;
+      saveStateToDatabase();
+      toast("Incremental Telemetry Checkpoint Logged");
+    }
+
+    function toggleTask(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      if (!task.completed) {
+        task.completed = true;
+        task.status = 'done';
+        task.subtasks.forEach(s => s.completed = true);
+        logExecutionHistory(task.text);
+      } else {
+        task.completed = false;
+        task.status = 'todo';
+      }
+      saveStateToDatabase();
+      renderTasks();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      saveStateToDatabase();
+      populateSubjectDropdownFilter();
+      renderTasks();
+      toast("Objective Terminated and Purged");
+    }
+
+    function generateTaskCardMarkup(task) {
+      const bgColor = colors[task.colorIndex ?? 0];
+      const textColor = textColors[task.colorIndex ?? 0];
+      let subtaskMarkup = '';
+
+      task.subtasks.forEach(sub => {
+        subtaskMarkup += `
+          <div class="subtask-item">
+            <input type="checkbox" ${sub.completed ? 'checked' : ''} onchange="toggleSubtask('${task.id}', '${sub.id}')">
+            <span class="${sub.completed ? 'completed' : ''}">${sub.text}</span>
+          </div>
+        `;
+      });
+
+      const budgetPercent = Math.min(100, (task.actualPomos / (task.estimatedPomos || 1)) * 100);
+
+      return `
+        <div class="task" draggable="true" ondragstart="handleDragStart(event, '${task.id}')" ondragend="handleDragEnd(event)" id="card_${task.id}">
+          <div class="task-row-main">
+            <div style="width: 100%;">
+              <div class="task-title ${task.completed ? 'completed' : ''}">${task.text}</div>
+              <div class="meta">
+                <span>📅 Due: ${task.dueDate || 'Immediate Action Loop'}</span>
+                <span>⏱️ Pomo Metric: <b>${task.actualPomos}/${task.estimatedPomos}</b></span>
+              </div>
+              <div class="time-budget-bar">
+                <div class="time-budget-fill" style="width: ${budgetPercent}%; background:${task.actualPomos > task.estimatedPomos ? 'var(--red)' : 'var(--purple)'}"></div>
+              </div>
+              <div class="tags" style="margin-top:10px;">
+                <span class="tag" style="background:${bgColor}; color:${textColor};">${task.subject}</span>
+                <span class="tag ${task.priority.toLowerCase()}">${task.priority}</span>
+              </div>
+            </div>
+          </div>
+          <div class="subtask-wrapper">
+            <div style="font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; margin-bottom:5px;">Checkpoint Milestones</div>
+            ${subtaskMarkup}
+            <div class="subtask-input-group">
+              <input type="text" id="subInput_${task.id}" placeholder="Append subtask criteria layer...">
+              <button class="btn" style="padding:6px 12px; font-size:11px; border-radius:10px;" onclick="addSubtask('${task.id}')">+</button>
+            </div>
+          </div>
+          <div class="task-buttons">
+            <button class="complete-btn" onclick="toggleTask('${task.id}')">✓ Toggle Checked</button>
+            <button class="delete-btn" onclick="deleteTask('${task.id}')">✕ Clear Node</button>
+          </div>
+        </div>
+      `;
+    }
+
+    let draggedTaskId = null;
+    function handleDragStart(e, id) { draggedTaskId = id; document.getElementById(`card_${id}`).classList.add('dragging'); e.dataTransfer.setData('text/plain', id); }
+    function handleDragEnd(e) { if(draggedTaskId) { const el = document.getElementById(`card_${draggedTaskId}`); if(el) el.classList.remove('dragging'); } }
+    function allowKanbanDrop(e) { e.preventDefault(); }
+    function handleKanbanDragEnter(e, columnId) { e.preventDefault(); document.getElementById(`col_${columnId}`).classList.add('drag-over'); }
+    function handleKanbanDragLeave(e, columnId) { document.getElementById(`col_${columnId}`).classList.remove('drag-over'); }
+    function handleKanbanDrop(e, columnId) {
+      e.preventDefault();
+      document.getElementById(`col_${columnId}`).classList.remove('drag-over');
+      const id = e.dataTransfer.getData('text/plain') || draggedTaskId;
+      if(id) { updateTaskStatus(id, columnId); draggedTaskId = null; }
+    }
+
+    function renderTasks() {
+      const container = document.getElementById("viewContainer");
+      container.innerHTML = "";
+      
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const subjectFilter = document.getElementById("filterSubject").value;
+      const priorityFilter = document.getElementById("filterPriority").value;
+      const sortingMode = document.getElementById("sortCriteria").value;
+
+      let completedCount = tasks.filter(t => t.completed).length;
+
+      let filtered = tasks.filter(t => {
+        const matchesSearch = t.text.toLowerCase().includes(search);
+        const matchesSubject = (subjectFilter === 'all' || t.subject === subjectFilter);
+        const matchesPriority = (priorityFilter === 'all' || t.priority === priorityFilter);
+        return matchesSearch && matchesSubject && matchesPriority;
+      });
+
+      if (sortingMode === 'date') {
+        filtered.sort((a,b) => { if(!a.dueDate) return 1; if(!b.dueDate) return -1; return new Date(a.dueDate) - new Date(b.dueDate); });
+      } else if (sortingMode === 'priority') {
+        const weight = { high: 3, medium: 2, low: 1 };
+        filtered.sort((a,b) => weight[b.priority] - weight[a.priority]);
+      }
+
+      if (currentView === 'list') {
+        const listDiv = document.createElement("div");
+        listDiv.className = "task-list";
+        filtered.forEach((task) => { listDiv.innerHTML += generateTaskCardMarkup(task); });
+        container.appendChild(listDiv);
+      } else {
+        const kanbanBoard = document.createElement("div");
+        kanbanBoard.className = "kanban-board";
+        
+        const columnTypes = [
+          { key: 'todo', name: 'Backlog Register' },
+          { key: 'progress', name: 'Active Processing' },
+          { key: 'done', name: 'Verified Outflow' }
+        ];
+
+        columnTypes.forEach(col => {
+          const colDiv = document.createElement("div");
+          colDiv.className = "kanban-col"; colDiv.id = `col_${col.key}`;
+          colDiv.setAttribute('ondragover', 'allowKanbanDrop(event)');
+          colDiv.setAttribute('ondragenter', `handleKanbanDragEnter(event, '${col.key}')`);
+          colDiv.setAttribute('ondragleave', `handleKanbanDragLeave(event, '${col.key}')`);
+          colDiv.setAttribute('ondrop', `handleKanbanDrop(event, '${col.key}')`);
+
+          const colTasks = filtered.filter(t => t.status === col.key || (col.key === 'todo' && !t.status));
+          colDiv.innerHTML = `<h3>${col.name} <span>${colTasks.length}</span></h3>`;
+          
+          const cardsDiv = document.createElement("div");
+          cardsDiv.className = "kanban-cards";
+          colTasks.forEach(task => { cardsDiv.innerHTML += generateTaskCardMarkup(task); });
+          
+          colDiv.appendChild(cardsDiv);
+          kanbanBoard.appendChild(colDiv);
+        });
+        container.appendChild(kanbanBoard);
+      }
+
+      updateDashboardLayoutMetricsCounters(completedCount);
+      renderHistoryFeedLogs();
+      updateDynamicHeuristicInsightsProfile();
+      renderHeatmapGridArrayElements();
+      requestAnimationFrame(drawChartVectorGraphics);
+    }
+
+    function updateDashboardLayoutMetricsCounters(completed) {
+      const total = tasks.length;
+      const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+      document.getElementById("totalTasks").innerText = total;
+      document.getElementById("completedTasks").innerText = completed;
+      document.getElementById("sessions").innerText = sessionCount;
+      document.getElementById("productivity").innerText = percent + "%";
+      document.getElementById("progressFill").style.width = percent + "%";
+      document.getElementById("progressText").innerText = percent + "%";
+    }
+
+    function renderHistoryFeedLogs() {
+      const box = document.getElementById("history");
+      box.innerHTML = "";
+      history.slice(0, 4).forEach(item => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `⚙️ Log Node: ${item.text}<br><small style="color:var(--muted); font-size:11px; font-weight:700;">Time Register: ${item.date}</small>`;
+        box.appendChild(div);
+      });
+    }
+
+    function updateDynamicHeuristicInsightsProfile() {
+      let text = "System parameters executing inside expected limits.";
+      const pending = tasks.filter(task => !task.completed);
+
+      if (pending.length >= 6) text = "High concentration footprint. Decongest backlog metrics by isolating core operations nodes.";
+      if (tasks.length > 0 && tasks.every(task => task.completed)) text = "Null space verified. Complete tasks register completely processed and resolved.";
+      document.getElementById("insight").innerText = text;
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      requestAnimationFrame(drawChartVectorGraphics);
+    }
+
+    function exportCSV() {
+      if (tasks.length === 0) { toast("Data registers empty."); return; }
+      let csv = "data:text/csv;charset=utf-8,ID,Objective,Due Date,Category,Priority,Est Pomo,Actual Pomo,Completed,Status\n";
+      tasks.forEach(t => { csv += `"${t.id}","${t.text}","${t.dueDate}","${t.subject}","${t.priority}",${t.estimatedPomos},${t.actualPomos},${t.completed},"${t.status}"\n`; });
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csv));
+      link.setAttribute("download", "nexus_production_metrics.csv");
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
+      toast("Spreadsheet Dataset Compiled Successfully");
+    }
+
+    function exportJSON() {
+      const data = JSON.stringify({ tasks, history, sessionCount, studyData }, null, 2);
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a"); a.href = url; a.download = "nexus_system_config.json"; a.click();
+      toast("Configuration JSON Matrix Array Backup Complete");
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed.tasks && parsed.history) {
+            tasks = parsed.tasks; history = parsed.history;
+            sessionCount = parsed.sessionCount || 0; studyData = parsed.studyData || {};
+            saveStateToDatabase(); populateSubjectDropdownFilter(); renderTasks();
+            toast("System Restored From JSON Core Map");
+          } else { toast("Invalid configuration file schema parameters mapping failed."); }
+        } catch(err) { toast("Failed to decode template stream."); }
+      };
+      reader.readAsText(file);
+    }
+
+    function renderHeatmapGridArrayElements() {
+      const heatmap = document.getElementById("heatmap");
+      heatmap.innerHTML = "";
+      const today = new Date();
+
+      for (let i = 34; i >= 0; i--) {
+        const date = new Date(); date.setDate(today.getDate() - i);
+        const key = date.toISOString().split("T")[0];
+        const value = studyData[key] || 0;
+
+        const box = document.createElement("div");
+        let level = "level0";
+        if (value >= 1) level = "level1"; if (value >= 3) level = "level2"; if (value >= 5) level = "level3";
+
+        box.className = `box ${level}`;
+        box.title = `Index Node Array [${key}]: ${value} Operational Clusters Commited`;
+        heatmap.appendChild(box);
+      }
+    }
+
+    // ADVANCED ARCHITECTURE LAYER: HD Dynamic Fluid Vector Resizing Analytics Canvas Engine
+    function drawChartVectorGraphics() {
+      const canvas = document.getElementById("chart");
+      const ctx = canvas.getContext("2d");
+      
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      
+      canvas.width = rect.width * dpr;
+      canvas.height = 300 * dpr;
+      ctx.scale(dpr, dpr);
+
+      const renderWidth = rect.width;
+      const renderHeight = 300;
+      ctx.clearRect(0, 0, renderWidth, renderHeight);
+
+      const today = new Date();
+      let values = [];
+      let labels = [];
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(); date.setDate(today.getDate() - i);
+        const key = date.toISOString().split("T")[0];
+        values.push(studyData[key] || 0);
+        labels.push(daysOfWeek[date.getDay()]);
+      }
+
+      const totalBars = 7;
+      const horizontalPadding = 60;
+      const availableWidth = renderWidth - (horizontalPadding * 2);
+      const barWidth = (availableWidth / totalBars) * 0.6;
+      const barGap = (availableWidth / totalBars) * 0.4;
+      const maxVal = Math.max(...values, 1);
+
+      values.forEach((value, index) => {
+        const usableHeight = renderHeight - 90;
+        const barHeight = (value / maxVal) * usableHeight; 
+        const barX = horizontalPadding + (index * (barWidth + barGap)) + (barGap / 2);
+        const barY = renderHeight - 50 - barHeight;
+
+        let gradient = ctx.createLinearGradient(barX, barY, barX, renderHeight - 50);
+        gradient.addColorStop(0, '#3b82f6');
+        gradient.addColorStop(1, '#8b5cf6');
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        if (typeof ctx.roundRect === "function") {
+          ctx.roundRect(barX, barY, barWidth, barHeight, [8, 8, 0, 0]);
+        } else {
+          ctx.fillRect(barX, barY, barWidth, barHeight);
+        }
+        ctx.fill();
+
+        ctx.fillStyle = document.body.classList.contains("dark") ? "#94a3b8" : "#64748b";
+        ctx.font = "bold 12px Inter, system-ui, Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(labels[index], barX + (barWidth / 2), renderHeight - 25);
+        ctx.fillText(value, barX + (barWidth / 2), barY - 12);
+      });
+    }
+
+    // Debounced Resize Event Listener
+    let resizeDebounceTimeout = null;
+    const resizeObserver = new ResizeObserver(() => {
+      clearTimeout(resizeDebounceTimeout);
+      resizeDebounceTimeout = setTimeout(() => {
+        requestAnimationFrame(drawChartVectorGraphics);
+      }, 80);
+    });
+    resizeObserver.observe(document.getElementById("chartParentContainer"));
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(time / 60); const seconds = time % 60;
+      document.getElementById("timer").innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      
+      const circle = document.getElementById("timerCircle");
+      const totalOffset = 565; const currentProgress = (time / timerDuration) * totalOffset;
+      circle.style.strokeDashoffset = totalOffset - currentProgress;
+    }
+
+    function triggerAudioAlert() {
+      if(!document.getElementById("soundToggle").checked) return;
+      try {
+        initAudioCtx();
+        let runSynthChordNode = (freq, startOffset, duration) => {
+          let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+          osc.type = "sine"; osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startOffset);
+          osc.connect(gain); gain.connect(mainGainNode || audioCtx.destination);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime + startOffset);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + startOffset + duration);
+          osc.start(audioCtx.currentTime + startOffset); osc.stop(audioCtx.currentTime + startOffset + duration);
+        };
+        runSynthChordNode(523.25, 0.0, 0.4); runSynthChordNode(659.25, 0.15, 0.4); runSynthChordNode(783.99, 0.3, 0.6); 
+      } catch(e){}
+    }
+
+    function initAudioCtx() {
+      if(!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        mainGainNode = audioCtx.createGain();
+        mainGainNode.gain.setValueAtTime(document.getElementById("volumeSlider").value, audioCtx.currentTime);
+        mainGainNode.connect(audioCtx.destination);
+      }
+    }
+
+    function updateVolume() {
+      const vol = document.getElementById("volumeSlider").value;
+      if (mainGainNode && audioCtx) mainGainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+    }
+
+    function toggleAmbientNoise() {
+      const mode = document.getElementById("ambientSound").value;
+      if (ambientNode) { try { ambientNode.stop(); } catch(e){} ambientNode = null; }
+      if(visualizerAnim) { cancelAnimationFrame(visualizerAnim); visualizerAnim = null; }
+      if (mode === 'none') { clearVisualizerCanvas(); return; }
+      
+      initAudioCtx();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+
+      if (mode === 'white') {
+        for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+        ambientNode = audioCtx.createBufferSource(); ambientNode.buffer = noiseBuffer; ambientNode.loop = true;
+      } else if (mode === 'pink') {
+        let b0, b1, b2, b3, b4, b5, b6; b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          let white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179; b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520; b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522; b5 = -0.7616 * b5 - white * 0.0168980;
+          output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362; output[i] *= 0.11; b6 = white * 0.115926;
+        }
+        ambientNode = audioCtx.createBufferSource(); ambientNode.buffer = noiseBuffer; ambientNode.loop = true;
+      } else if (mode === 'osc') {
+        let osc1 = audioCtx.createOscillator(); let osc2 = audioCtx.createOscillator();
+        osc1.type = 'triangle'; osc2.type = 'sine';
+        osc1.frequency.setValueAtTime(90, audioCtx.currentTime); osc2.frequency.setValueAtTime(90.5, audioCtx.currentTime);
+        let localGain = audioCtx.createGain(); localGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        osc1.connect(localGain); osc2.connect(localGain);
+        ambientNode = { connect: (dest) => localGain.connect(dest), stop: () => { osc1.stop(); osc2.stop(); } };
+        osc1.start(); osc2.start();
+      }
+
+      let analyzer = audioCtx.createAnalyser(); analyzer.fftSize = 64;
+      ambientNode.connect(analyzer); analyzer.connect(mainGainNode);
+      if(ambientNode.start) ambientNode.start();
+      runVisualizerLoop(analyzer);
+    }
+
+    function clearVisualizerCanvas() {
+      const c = document.getElementById("visualizer"); const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height);
+    }
+
+    function runVisualizerLoop(analyzer) {
+      const canvas = document.getElementById("visualizer"); const ctx = canvas.getContext("2d");
+      const bufferLength = analyzer.frequencyBinCount; const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        visualizerAnim = requestAnimationFrame(draw); analyzer.getByteFrequencyData(dataArray);
+        ctx.fillStyle = document.body.classList.contains("dark") ? "#0b0f19" : "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const barWidth = (canvas.width / bufferLength) * 1.5; let barHeight; let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i] / 4; ctx.fillStyle = 'rgba(59, 130, 246, ' + (barHeight / 60 + 0.1) + ')';
+          ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight); x += barWidth;
+        }
+      }
+      draw();
+    }
+
+    function startTimer() {
+      if (timer) return;
+      initAudioCtx();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+
+      timer = setInterval(() => {
+        if (time > 0) { time--; updateTimerDisplay(); } 
+        else {
+          clearInterval(timer); timer = null;
+          if(activeMode === 'work') {
+            sessionCount++; toast("Deep Focus Cycle Finished!");
+            let activeTask = tasks.find(t => t.status === 'progress' && !t.completed);
+            if(!activeTask) activeTask = tasks.find(t => t.status === 'todo' && !t.completed);
+            if(activeTask) {
+              activeTask.actualPomos = (activeTask.actualPomos || 0) + 1;
+              toast(`Logged segment metrics loop into: "${activeTask.text}"`);
+            }
+          } else { toast("Break complete. Re-engage performance stream pipeline."); }
+          
+          triggerAudioAlert(); saveStateToDatabase(); renderTasks(); setTimerMode('work');
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() { clearInterval(timer); timer = null; }
+    function resetTimer() { pauseTimer(); time = timerDuration; updateTimerDisplay(); }
+
+    // Initialize Native Database Layer Execution Chain on Window Boot Up Load
+    window.addEventListener("DOMContentLoaded", () => {
+      initDatabase(() => {
+        populateSubjectDropdownFilter();
+        switchView(currentView);
+        updateTimerDisplay();
+      });
+    });
+  </script>
+</body>
+</html>
