@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STUDY TRACKER CORE v3.0 - ADVANCED ARCHITECTURE</title>
+  <title>Study Tracker Pro</title>
   <style>
     * {
       margin: 0;
@@ -416,8 +416,8 @@
   <div class="container">
     <div class="topbar">
       <div class="logo">
-        <h1>STUDY TRACKER</h1>
-        <p>Transactional Database Architecture & High-Definition Control Workspace</p>
+        <h1>Study Tracker Pro</h1>
+        <p>Smart Study Management System</p>
       </div>
       <div class="top-actions">
         <button class="btn" onclick="toggleTheme()">🌓 Theme Engine</button>
@@ -432,19 +432,19 @@
 
     <div class="dashboard">
       <div class="card blue-deck">
-        <div class="card-title">Indexed Database Nodes</div>
+        <div class="card-title">Total Tasks</div>
         <div class="card-value" id="totalTasks">0</div>
       </div>
       <div class="card green-deck">
-        <div class="card-title">Verified Completions</div>
+        <div class="card-title">Completed Tasks</div>
         <div class="card-value" id="completedTasks">0</div>
       </div>
       <div class="card purple-deck">
-        <div class="card-title">Cycles Composed</div>
+        <div class="card-title">Study Sessions</div>
         <div class="card-value" id="sessions">0</div>
       </div>
       <div class="card orange-deck">
-        <div class="card-title">Efficiency Metric Vector</div>
+        <div class="card-title">Productivity</div>
         <div class="card-value" id="productivity">0%</div>
       </div>
     </div>
@@ -453,30 +453,30 @@
       <div class="main-panel">
         <div class="panel">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap:15px;">
-            <h2>Dynamic Task Data Streams</h2>
+            <h2>Task Manager</h2>
             <div>
-              <button class="btn active" style="padding: 6px 14px; font-size:12px; border-radius:20px;" id="listViewBtn" onclick="switchView('list')">List Architecture</button>
-              <button class="btn" style="padding: 6px 14px; font-size:12px; border-radius:20px;" id="kanbanViewBtn" onclick="switchView('kanban')">Kanban Kanban Space</button>
+              <button class="btn active" style="padding: 6px 14px; font-size:12px; border-radius:20px;" id="listViewBtn" onclick="switchView('list')">List View</button>
+              <button class="btn" style="padding: 6px 14px; font-size:12px; border-radius:20px;" id="kanbanViewBtn" onclick="switchView('kanban')">Kanban Board</button>
             </div>
           </div>
           
           <div class="inputs">
-            <input type="text" id="taskInput" placeholder="Specify technical criteria context...">
+            <input type="text" id="taskInput" placeholder="Enter task name...">
             <input type="date" id="dueDate">
-            <input type="text" id="subject" placeholder="Module Workspace / Tag">
+            <input type="text" id="subject" placeholder="Subject">
             <select id="priority">
               <option value="low">Low Priority</option>
               <option value="medium" selected>Medium Priority</option>
               <option value="high">High Priority</option>
             </select>
             <input type="number" id="estimatedPomos" min="1" max="10" value="1" placeholder="Est. Pomos">
-            <button class="btn primary" onclick="addTask()">Deploy Node</button>
+            <button class="btn primary" onclick="addTask()">Add Task</button>
           </div>
 
           <div class="filter-toolbar">
-            <input type="text" id="searchInput" placeholder="Query indexed text arrays..." onkeyup="renderTasks()" style="flex:2;">
+            <input type="text" id="searchInput" placeholder="Search tasks..." onkeyup="renderTasks()" style="flex:2;">
             <select id="filterSubject" onchange="renderTasks()">
-              <option value="all">All Workspace Spaces</option>
+              <option value="all">All Subjects</option>
             </select>
             <select id="filterPriority" onchange="renderTasks()">
               <option value="all">All Priorities</option>
@@ -485,9 +485,9 @@
               <option value="high">High Level</option>
             </select>
             <select id="sortCriteria" onchange="renderTasks()">
-              <option value="none">No Structural Sort</option>
-              <option value="date">Target Due Date</option>
-              <option value="priority">Priority Weight</option>
+              <option value="none">No Sorting</option>
+              <option value="date">Sort by Due Date</option>
+              <option value="priority">Sort by Priority</option>
             </select>
           </div>
           
@@ -498,13 +498,13 @@
               <div class="progress-fill" id="progressFill"></div>
             </div>
             <p style="margin-top:12px; color:var(--muted); font-size: 14px; font-weight: 700;">
-              System Execution Threshold Balance: <span id="progressText">0%</span>
+              Overall Progress: <span id="progressText">0%</span>
             </p>
           </div>
         </div>
 
         <div class="panel">
-          <h2>Chronology Frequency Array Matrix Map (Last 35 Computational Run Loops)</h2>
+          <h2>Study Activity Heatmap</h2>
           <div style="margin-bottom: 15px; font-size: 12px; color: var(--muted); font-weight: 600; margin-top:5px;">
             Heat Density Keys: <span style="color:var(--border)">■</span> 0 Units Logged | <span style="color:#bbf7d0">■</span> 1-2 Units | <span style="color:#4ade80">■</span> 3-4 Units | <span style="color:#10b981">■</span> 5+ Run Clusters
           </div>
@@ -512,7 +512,7 @@
         </div>
 
         <div class="panel" id="chartParentContainer">
-          <h2>High-Definition Vector Velocity Stream Analysis</h2>
+          <h2>Weekly Study Analytics</h2>
           <div class="chart-container">
             <canvas id="chart"></canvas>
           </div>
@@ -521,23 +521,23 @@
 
       <div class="side-panel">
         <div class="panel" style="text-align: center;">
-          <h2>Modular Focus Pomo Engine</h2>
+          <h2>Pomodoro Timer</h2>
           
           <div class="pomodoro-modes" style="margin-top: 15px;">
             <button class="btn mode-btn active" id="mode-work" onclick="setTimerMode('work')">Work Cycle</button>
-            <button class="btn mode-btn" id="mode-short" onclick="setTimerMode('short')">Short Relaxation</button>
-            <button class="btn mode-btn" id="mode-long" onclick="setTimerMode('long')">Extended Break</button>
+            <button class="btn mode-btn" id="mode-short" onclick="setTimerMode('short')">Short Break</button>
+            <button class="btn mode-btn" id="mode-long" onclick="setTimerMode('long')">Long Break</button>
           </div>
 
           <div class="timer-options">
-            <label><input type="checkbox" id="soundToggle" checked> Audio Signal Core</label>
+            <label><input type="checkbox" id="soundToggle" checked> Sound Alerts</label>
             <label style="margin-top:5px; display:inline-block; width: 100%; text-align: left;">
-              📻 Ambient Generator:
+              📻 Background Sounds:
               <select id="ambientSound" onchange="toggleAmbientNoise()" style="padding:4px 8px; font-size:11px; margin-left:5px; border-radius:8px; width: auto; display: inline-block;">
                 <option value="none">Disabled</option>
-                <option value="white">Static White Loop</option>
-                <option value="pink">Deep Pink Focus</option>
-                <option value="osc">Focus Drone Synthesis</option>
+                <option value="white">White Noise</option>
+                <option value="pink">Pink Noise</option>
+                <option value="osc">Focus Tone</option>
               </select>
             </label>
             <div class="volume-control">
@@ -557,24 +557,24 @@
           </div>
 
           <div class="timer-buttons" style="display: flex; gap: 8px; justify-content: center;">
-            <button class="btn primary" onclick="startTimer()">Initialize System Block</button>
-            <button class="btn" onclick="pauseTimer()">Halt Stream</button>
-            <button class="btn" onclick="resetTimer()">Reset Register</button>
+            <button class="btn primary" onclick="startTimer()">Start</button>
+            <button class="btn" onclick="pauseTimer()">Pause</button>
+            <button class="btn" onclick="resetTimer()">Reset</button>
           </div>
         </div>
 
         <div class="panel">
-          <h2>Predictive Telemetry Profiling</h2>
+          <h2>Study Insights</h2>
           <div class="insight" id="insight" style="font-weight:600; line-height:1.6;">Aggregating cluster history configurations...</div>
         </div>
 
         <div class="panel">
-          <h2>Cognitive Catalyst Variable</h2>
+          <h2>Daily Motivation</h2>
           <div class="quote" id="quote" style="font-style: italic; font-weight:600; line-height:1.6;"></div>
         </div>
 
         <div class="panel">
-          <h2>Real-Time Activity Ledger Logs</h2>
+          <h2>Recent Activity</h2>
           <div id="history"></div>
         </div>
       </div>
@@ -630,7 +630,7 @@
       };
 
       request.onerror = function() {
-        toast("Database Connection Crash. Reverting to memory mode.");
+        toast("Database Error. Using Local Storage");
         callback();
       };
     }
@@ -737,13 +737,13 @@
       saveStateToDatabase();
       populateSubjectDropdownFilter();
       renderTasks();
-      toast("Objective Node Tracked in DB Matrix");
+      toast("Task Added Successfully");
     }
 
     function populateSubjectDropdownFilter() {
       const drop = document.getElementById("filterSubject");
       const currentSelection = drop.value;
-      drop.innerHTML = '<option value="all">All Workspace Spaces</option>';
+      drop.innerHTML = '<option value="all">All Subjects</option>';
       
       let set = new Set();
       tasks.forEach(t => { if(t.subject) set.add(t.subject); });
@@ -799,7 +799,7 @@
       const today = new Date().toISOString().split("T")[0];
       studyData[today] = (studyData[today] || 0) + 1;
       saveStateToDatabase();
-      toast("Incremental Telemetry Checkpoint Logged");
+      toast("Task Completed");
     }
 
     function toggleTask(taskId) {
@@ -824,7 +824,7 @@
       saveStateToDatabase();
       populateSubjectDropdownFilter();
       renderTasks();
-      toast("Objective Terminated and Purged");
+      toast("Task Deleted");
     }
 
     function generateTaskCardMarkup(task) {
@@ -883,382 +883,412 @@
     function allowKanbanDrop(e) { e.preventDefault(); }
     function handleKanbanDragEnter(e, columnId) { e.preventDefault(); document.getElementById(`col_${columnId}`).classList.add('drag-over'); }
     function handleKanbanDragLeave(e, columnId) { document.getElementById(`col_${columnId}`).classList.remove('drag-over'); }
-    function handleKanbanDrop(e, columnId) {
+    
+    function handleKanbanDrop(e, nextStatus) {
       e.preventDefault();
-      document.getElementById(`col_${columnId}`).classList.remove('drag-over');
+      document.getElementById(`col_${nextStatus}`).classList.remove('drag-over');
       const id = e.dataTransfer.getData('text/plain') || draggedTaskId;
-      if(id) { updateTaskStatus(id, columnId); draggedTaskId = null; }
+      if(id) {
+        updateTaskStatus(id, nextStatus);
+      }
     }
 
     function renderTasks() {
       const container = document.getElementById("viewContainer");
-      container.innerHTML = "";
-      
-      const search = document.getElementById("searchInput").value.toLowerCase();
+      const searchVal = document.getElementById("searchInput").value.toLowerCase();
       const subjectFilter = document.getElementById("filterSubject").value;
       const priorityFilter = document.getElementById("filterPriority").value;
-      const sortingMode = document.getElementById("sortCriteria").value;
-
-      let completedCount = tasks.filter(t => t.completed).length;
+      const sortCriteria = document.getElementById("sortCriteria").value;
 
       let filtered = tasks.filter(t => {
-        const matchesSearch = t.text.toLowerCase().includes(search);
+        const matchesSearch = t.text.toLowerCase().includes(searchVal);
         const matchesSubject = (subjectFilter === 'all' || t.subject === subjectFilter);
         const matchesPriority = (priorityFilter === 'all' || t.priority === priorityFilter);
         return matchesSearch && matchesSubject && matchesPriority;
       });
 
-      if (sortingMode === 'date') {
-        filtered.sort((a,b) => { if(!a.dueDate) return 1; if(!b.dueDate) return -1; return new Date(a.dueDate) - new Date(b.dueDate); });
-      } else if (sortingMode === 'priority') {
-        const weight = { high: 3, medium: 2, low: 1 };
-        filtered.sort((a,b) => weight[b.priority] - weight[a.priority]);
+      if (sortCriteria === 'date') {
+        filtered.sort((a, b) => {
+          if (!a.dueDate) return 1;
+          if (!b.dueDate) return -1;
+          return new Date(a.dueDate) - new Date(b.dueDate);
+        });
+      } else if (sortCriteria === 'priority') {
+        const weights = { high: 3, medium: 2, low: 1 };
+        filtered.sort((a, b) => weights[b.priority] - weights[a.priority]);
       }
 
       if (currentView === 'list') {
-        const listDiv = document.createElement("div");
-        listDiv.className = "task-list";
-        filtered.forEach((task) => { listDiv.innerHTML += generateTaskCardMarkup(task); });
-        container.appendChild(listDiv);
+        let markup = '<div class="task-list">';
+        if(filtered.length === 0) markup += `<div style="padding:40px; color:var(--muted); text-align:center; font-weight:700;">No structured nodes registered.</div>`;
+        filtered.forEach(t => { markup += generateTaskCardMarkup(t); });
+        markup += '</div>';
+        container.innerHTML = markup;
       } else {
-        const kanbanBoard = document.createElement("div");
-        kanbanBoard.className = "kanban-board";
-        
-        const columnTypes = [
-          { key: 'todo', name: 'Backlog Register' },
-          { key: 'progress', name: 'Active Processing' },
-          { key: 'done', name: 'Verified Outflow' }
-        ];
+        const todoTasks = filtered.filter(t => t.status === 'todo' || !t.status);
+        const progressTasks = filtered.filter(t => t.status === 'progress');
+        const doneTasks = filtered.filter(t => t.status === 'done');
 
-        columnTypes.forEach(col => {
-          const colDiv = document.createElement("div");
-          colDiv.className = "kanban-col"; colDiv.id = `col_${col.key}`;
-          colDiv.setAttribute('ondragover', 'allowKanbanDrop(event)');
-          colDiv.setAttribute('ondragenter', `handleKanbanDragEnter(event, '${col.key}')`);
-          colDiv.setAttribute('ondragleave', `handleKanbanDragLeave(event, '${col.key}')`);
-          colDiv.setAttribute('ondrop', `handleKanbanDrop(event, '${col.key}')`);
-
-          const colTasks = filtered.filter(t => t.status === col.key || (col.key === 'todo' && !t.status));
-          colDiv.innerHTML = `<h3>${col.name} <span>${colTasks.length}</span></h3>`;
-          
-          const cardsDiv = document.createElement("div");
-          cardsDiv.className = "kanban-cards";
-          colTasks.forEach(task => { cardsDiv.innerHTML += generateTaskCardMarkup(task); });
-          
-          colDiv.appendChild(cardsDiv);
-          kanbanBoard.appendChild(colDiv);
-        });
-        container.appendChild(kanbanBoard);
+        container.innerHTML = `
+          <div class="kanban-board">
+            <div class="kanban-col" id="col_todo" ondragover="allowKanbanDrop(event)" ondragenter="handleKanbanDragEnter(event, 'todo')" ondragleave="handleKanbanDragLeave(event, 'todo')" ondrop="handleKanbanDrop(event, 'todo')">
+              <h3>To Do <span>${todoTasks.length}</span></h3>
+              <div class="kanban-cards">${todoTasks.map(t => generateTaskCardMarkup(t)).join('')}</div>
+            </div>
+            <div class="kanban-col" id="col_progress" ondragover="allowKanbanDrop(event)" ondragenter="handleKanbanDragEnter(event, 'progress')" ondragleave="handleKanbanDragLeave(event, 'progress')" ondrop="handleKanbanDrop(event, 'progress')">
+              <h3>In Progress <span>${progressTasks.length}</span></h3>
+              <div class="kanban-cards">${progressTasks.map(t => generateTaskCardMarkup(t)).join('')}</div>
+            </div>
+            <div class="kanban-col" id="col_done" ondragover="allowKanbanDrop(event)" ondragenter="handleKanbanDragEnter(event, 'done')" ondragleave="handleKanbanDragLeave(event, 'done')" ondrop="handleKanbanDrop(event, 'done')">
+              <h3>Done <span>${doneTasks.length}</span></h3>
+              <div class="kanban-cards">${doneTasks.map(t => generateTaskCardMarkup(t)).join('')}</div>
+            </div>
+          </div>
+        `;
       }
-
-      updateDashboardLayoutMetricsCounters(completedCount);
-      renderHistoryFeedLogs();
-      updateDynamicHeuristicInsightsProfile();
-      renderHeatmapGridArrayElements();
-      requestAnimationFrame(drawChartVectorGraphics);
+      calculateMetrics();
     }
 
-    function updateDashboardLayoutMetricsCounters(completed) {
+    function calculateMetrics() {
       const total = tasks.length;
-      const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+      const completed = tasks.filter(t => t.completed).length;
+      const efficiency = total > 0 ? Math.round((completed / total) * 100) : 0;
 
       document.getElementById("totalTasks").innerText = total;
       document.getElementById("completedTasks").innerText = completed;
       document.getElementById("sessions").innerText = sessionCount;
-      document.getElementById("productivity").innerText = percent + "%";
-      document.getElementById("progressFill").style.width = percent + "%";
-      document.getElementById("progressText").innerText = percent + "%";
+      document.getElementById("productivity").innerText = efficiency + "%";
+
+      document.getElementById("progressFill").style.width = efficiency + "%";
+      document.getElementById("progressText").innerText = efficiency + "%";
+
+      // Render Ledger Updates
+      const historyBox = document.getElementById("history");
+      historyBox.innerHTML = '';
+      if(history.length === 0) historyBox.innerHTML = '<div style="color:var(--muted); font-size:13px; font-weight:600;">System logs currently idling...</div>';
+      history.slice(0, 5).forEach(h => {
+        historyBox.innerHTML += `
+          <div class="history-item">
+            <div style="color:var(--blue); font-size:11px; margin-bottom:4px;">${h.date}</div>
+            <div>${h.text}</div>
+          </div>
+        `;
+      });
+
+      // Simple Analytics Insights Engine
+      const insightEl = document.getElementById("insight");
+      if(total === 0) {
+        insightEl.innerText = "Awaiting deployment parameters. Load metrics to populate algorithmic forecasting telemetry graphs.";
+      } else if (efficiency > 70) {
+        insightEl.innerText = "High-velocity production curve detected. Process operational nodes without expanding core task load vectors.";
+      } else {
+        insightEl.innerText = "System latency alert. Tasks are accumulating in the backlog thread faster than verified checkouts.";
+      }
+
+      renderHeatmap();
+      renderTelemetryChart();
     }
 
-    function renderHistoryFeedLogs() {
-      const box = document.getElementById("history");
-      box.innerHTML = "";
-      history.slice(0, 4).forEach(item => {
-        const div = document.createElement("div");
-        div.className = "history-item";
-        div.innerHTML = `⚙️ Log Node: ${item.text}<br><small style="color:var(--muted); font-size:11px; font-weight:700;">Time Register: ${item.date}</small>`;
-        box.appendChild(div);
+    function renderHeatmap() {
+      const mapEl = document.getElementById("heatmap");
+      mapEl.innerHTML = '';
+      
+      let dates = [];
+      for(let i=34; i>=0; i--) {
+        let d = new Date();
+        d.setDate(d.getDate() - i);
+        dates.push(d.toISOString().split('T')[0]);
+      }
+
+      dates.forEach(dayStr => {
+        const score = studyData[dayStr] || 0;
+        let lvl = 0;
+        if(score >= 5) lvl = 3;
+        else if(score >= 3) lvl = 2;
+        else if(score >= 1) lvl = 1;
+
+        mapEl.innerHTML += `<div class="box level${lvl}" title="${dayStr} : ${score} Ops Loaded"></div>`;
       });
     }
 
-    function updateDynamicHeuristicInsightsProfile() {
-      let text = "System parameters executing inside expected limits.";
-      const pending = tasks.filter(task => !task.completed);
-
-      if (pending.length >= 6) text = "High concentration footprint. Decongest backlog metrics by isolating core operations nodes.";
-      if (tasks.length > 0 && tasks.every(task => task.completed)) text = "Null space verified. Complete tasks register completely processed and resolved.";
-      document.getElementById("insight").innerText = text;
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
-      requestAnimationFrame(drawChartVectorGraphics);
-    }
-
-    function exportCSV() {
-      if (tasks.length === 0) { toast("Data registers empty."); return; }
-      let csv = "data:text/csv;charset=utf-8,ID,Objective,Due Date,Category,Priority,Est Pomo,Actual Pomo,Completed,Status\n";
-      tasks.forEach(t => { csv += `"${t.id}","${t.text}","${t.dueDate}","${t.subject}","${t.priority}",${t.estimatedPomos},${t.actualPomos},${t.completed},"${t.status}"\n`; });
-      const link = document.createElement("a");
-      link.setAttribute("href", encodeURI(csv));
-      link.setAttribute("download", "nexus_production_metrics.csv");
-      document.body.appendChild(link); link.click(); document.body.removeChild(link);
-      toast("Spreadsheet Dataset Compiled Successfully");
-    }
-
-    function exportJSON() {
-      const data = JSON.stringify({ tasks, history, sessionCount, studyData }, null, 2);
-      const blob = new Blob([data], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a"); a.href = url; a.download = "nexus_system_config.json"; a.click();
-      toast("Configuration JSON Matrix Array Backup Complete");
-    }
-
-    function importJSON(event) {
-      const file = event.target.files[0]; if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const parsed = JSON.parse(e.target.result);
-          if (parsed.tasks && parsed.history) {
-            tasks = parsed.tasks; history = parsed.history;
-            sessionCount = parsed.sessionCount || 0; studyData = parsed.studyData || {};
-            saveStateToDatabase(); populateSubjectDropdownFilter(); renderTasks();
-            toast("System Restored From JSON Core Map");
-          } else { toast("Invalid configuration file schema parameters mapping failed."); }
-        } catch(err) { toast("Failed to decode template stream."); }
-      };
-      reader.readAsText(file);
-    }
-
-    function renderHeatmapGridArrayElements() {
-      const heatmap = document.getElementById("heatmap");
-      heatmap.innerHTML = "";
-      const today = new Date();
-
-      for (let i = 34; i >= 0; i--) {
-        const date = new Date(); date.setDate(today.getDate() - i);
-        const key = date.toISOString().split("T")[0];
-        const value = studyData[key] || 0;
-
-        const box = document.createElement("div");
-        let level = "level0";
-        if (value >= 1) level = "level1"; if (value >= 3) level = "level2"; if (value >= 5) level = "level3";
-
-        box.className = `box ${level}`;
-        box.title = `Index Node Array [${key}]: ${value} Operational Clusters Commited`;
-        heatmap.appendChild(box);
-      }
-    }
-
-    // ADVANCED ARCHITECTURE LAYER: HD Dynamic Fluid Vector Resizing Analytics Canvas Engine
-    function drawChartVectorGraphics() {
+    function renderTelemetryChart() {
       const canvas = document.getElementById("chart");
+      if (!canvas) return;
       const ctx = canvas.getContext("2d");
-      
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      
-      canvas.width = rect.width * dpr;
-      canvas.height = 300 * dpr;
-      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const renderWidth = rect.width;
-      const renderHeight = 300;
-      ctx.clearRect(0, 0, renderWidth, renderHeight);
-
-      const today = new Date();
-      let values = [];
-      let labels = [];
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-      for (let i = 6; i >= 0; i--) {
-        const date = new Date(); date.setDate(today.getDate() - i);
-        const key = date.toISOString().split("T")[0];
-        values.push(studyData[key] || 0);
-        labels.push(daysOfWeek[date.getDay()]);
+      let datasets = [0, 0, 0, 0, 0, 0, 0];
+      for(let i=0; i<7; i++) {
+        let d = new Date();
+        d.setDate(d.getDate() - i);
+        let key = d.toISOString().split('T')[0];
+        datasets[6 - i] = studyData[key] || 0;
       }
 
-      const totalBars = 7;
-      const horizontalPadding = 60;
-      const availableWidth = renderWidth - (horizontalPadding * 2);
-      const barWidth = (availableWidth / totalBars) * 0.6;
-      const barGap = (availableWidth / totalBars) * 0.4;
-      const maxVal = Math.max(...values, 1);
-
-      values.forEach((value, index) => {
-        const usableHeight = renderHeight - 90;
-        const barHeight = (value / maxVal) * usableHeight; 
-        const barX = horizontalPadding + (index * (barWidth + barGap)) + (barGap / 2);
-        const barY = renderHeight - 50 - barHeight;
-
-        let gradient = ctx.createLinearGradient(barX, barY, barX, renderHeight - 50);
-        gradient.addColorStop(0, '#3b82f6');
-        gradient.addColorStop(1, '#8b5cf6');
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        if (typeof ctx.roundRect === "function") {
-          ctx.roundRect(barX, barY, barWidth, barHeight, [8, 8, 0, 0]);
-        } else {
-          ctx.fillRect(barX, barY, barWidth, barHeight);
-        }
-        ctx.fill();
-
-        ctx.fillStyle = document.body.classList.contains("dark") ? "#94a3b8" : "#64748b";
-        ctx.font = "bold 12px Inter, system-ui, Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(labels[index], barX + (barWidth / 2), renderHeight - 25);
-        ctx.fillText(value, barX + (barWidth / 2), barY - 12);
-      });
-    }
-
-    // Debounced Resize Event Listener
-    let resizeDebounceTimeout = null;
-    const resizeObserver = new ResizeObserver(() => {
-      clearTimeout(resizeDebounceTimeout);
-      resizeDebounceTimeout = setTimeout(() => {
-        requestAnimationFrame(drawChartVectorGraphics);
-      }, 80);
-    });
-    resizeObserver.observe(document.getElementById("chartParentContainer"));
-
-    function updateTimerDisplay() {
-      const minutes = Math.floor(time / 60); const seconds = time % 60;
-      document.getElementById("timer").innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
       
-      const circle = document.getElementById("timerCircle");
-      const totalOffset = 565; const currentProgress = (time / timerDuration) * totalOffset;
-      circle.style.strokeDashoffset = totalOffset - currentProgress;
+      const stepX = canvas.width / 8;
+      const maxVal = Math.max(...datasets, 4);
+      
+      datasets.forEach((val, index) => {
+        const x = stepX * (index + 1);
+        const y = canvas.height - 40 - ((val / maxVal) * (canvas.height - 80));
+        if(index === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // UI Frame Nodes Graph Lines
+      ctx.fillStyle = '#64748b';
+      ctx.font = 'bold 10px Inter, sans-serif';
+      for(let i=0; i<7; i++) {
+        ctx.fillText("T-" + (6-i) + "d", stepX * (i + 1) - 10, canvas.height - 15);
+      }
     }
 
-    function triggerAudioAlert() {
-      if(!document.getElementById("soundToggle").checked) return;
-      try {
-        initAudioCtx();
-        let runSynthChordNode = (freq, startOffset, duration) => {
-          let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-          osc.type = "sine"; osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startOffset);
-          osc.connect(gain); gain.connect(mainGainNode || audioCtx.destination);
-          gain.gain.setValueAtTime(0.15, audioCtx.currentTime + startOffset);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + startOffset + duration);
-          osc.start(audioCtx.currentTime + startOffset); osc.stop(audioCtx.currentTime + startOffset + duration);
-        };
-        runSynthChordNode(523.25, 0.0, 0.4); runSynthChordNode(659.25, 0.15, 0.4); runSynthChordNode(783.99, 0.3, 0.6); 
-      } catch(e){}
-    }
-
-    function initAudioCtx() {
+    // Advanced Synthesizer Controls (Audio Infrastructure Layer)
+    function checkAudioContext() {
       if(!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         mainGainNode = audioCtx.createGain();
-        mainGainNode.gain.setValueAtTime(document.getElementById("volumeSlider").value, audioCtx.currentTime);
+        mainGainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
         mainGainNode.connect(audioCtx.destination);
       }
     }
 
     function updateVolume() {
       const vol = document.getElementById("volumeSlider").value;
-      if (mainGainNode && audioCtx) mainGainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+      if(mainGainNode && audioCtx) {
+        mainGainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+      }
     }
 
     function toggleAmbientNoise() {
-      const mode = document.getElementById("ambientSound").value;
+      checkAudioContext();
+      const type = document.getElementById("ambientSound").value;
+
       if (ambientNode) { try { ambientNode.stop(); } catch(e){} ambientNode = null; }
-      if(visualizerAnim) { cancelAnimationFrame(visualizerAnim); visualizerAnim = null; }
-      if (mode === 'none') { clearVisualizerCanvas(); return; }
-      
-      initAudioCtx();
-      if(audioCtx.state === 'suspended') audioCtx.resume();
+      if (visualizerAnim) { cancelAnimationFrame(visualizerAnim); }
 
-      const bufferSize = 2 * audioCtx.sampleRate;
-      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
+      if(type === 'none') {
+        clearVisualizer();
+        return;
+      }
 
-      if (mode === 'white') {
-        for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
-        ambientNode = audioCtx.createBufferSource(); ambientNode.buffer = noiseBuffer; ambientNode.loop = true;
-      } else if (mode === 'pink') {
-        let b0, b1, b2, b3, b4, b5, b6; b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+      const bufferSize = 2 * audioCtx.sampleRate,
+      noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate),
+      output = noiseBuffer.getChannelData(0);
+
+      if (type === 'white') {
+        for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
+        ambientNode = audioCtx.createBufferSource();
+        ambientNode.buffer = noiseBuffer;
+        ambientNode.loop = true;
+      } else if (type === 'pink') {
+        let b0, b1, b2, b3, b4, b5, b6;
+        b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
         for (let i = 0; i < bufferSize; i++) {
           let white = Math.random() * 2 - 1;
-          b0 = 0.99886 * b0 + white * 0.0555179; b1 = 0.99332 * b1 + white * 0.0750759;
-          b2 = 0.96900 * b2 + white * 0.1538520; b3 = 0.86650 * b3 + white * 0.3104856;
-          b4 = 0.55000 * b4 + white * 0.5329522; b5 = -0.7616 * b5 - white * 0.0168980;
-          output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362; output[i] *= 0.11; b6 = white * 0.115926;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+          output[i] *= 0.11; 
+          b6 = white * 0.115926;
         }
-        ambientNode = audioCtx.createBufferSource(); ambientNode.buffer = noiseBuffer; ambientNode.loop = true;
-      } else if (mode === 'osc') {
-        let osc1 = audioCtx.createOscillator(); let osc2 = audioCtx.createOscillator();
-        osc1.type = 'triangle'; osc2.type = 'sine';
-        osc1.frequency.setValueAtTime(90, audioCtx.currentTime); osc2.frequency.setValueAtTime(90.5, audioCtx.currentTime);
-        let localGain = audioCtx.createGain(); localGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        osc1.connect(localGain); osc2.connect(localGain);
-        ambientNode = { connect: (dest) => localGain.connect(dest), stop: () => { osc1.stop(); osc2.stop(); } };
-        osc1.start(); osc2.start();
+        ambientNode = audioCtx.createBufferSource();
+        ambientNode.buffer = noiseBuffer;
+        ambientNode.loop = true;
+      } else if (type === 'osc') {
+        ambientNode = audioCtx.createOscillator();
+        ambientNode.type = 'sine';
+        ambientNode.frequency.setValueAtTime(120, audioCtx.currentTime);
       }
 
-      let analyzer = audioCtx.createAnalyser(); analyzer.fftSize = 64;
-      ambientNode.connect(analyzer); analyzer.connect(mainGainNode);
-      if(ambientNode.start) ambientNode.start();
-      runVisualizerLoop(analyzer);
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64;
+      
+      ambientNode.connect(analyser);
+      analyser.connect(mainGainNode);
+      ambientNode.start();
+
+      drawVisualizer(analyser);
     }
 
-    function clearVisualizerCanvas() {
-      const c = document.getElementById("visualizer"); const ctx = c.getContext("2d"); ctx.clearRect(0, 0, c.width, c.height);
+    function clearVisualizer() {
+      const v = document.getElementById("visualizer");
+      const ctx = v.getContext("2d");
+      ctx.clearRect(0,0,v.width,v.height);
     }
 
-    function runVisualizerLoop(analyzer) {
-      const canvas = document.getElementById("visualizer"); const ctx = canvas.getContext("2d");
-      const bufferLength = analyzer.frequencyBinCount; const dataArray = new Uint8Array(bufferLength);
+    function drawVisualizer(analyser) {
+      const v = document.getElementById("visualizer");
+      const ctx = v.getContext("2d");
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
 
-      function draw() {
-        visualizerAnim = requestAnimationFrame(draw); analyzer.getByteFrequencyData(dataArray);
-        ctx.fillStyle = document.body.classList.contains("dark") ? "#0b0f19" : "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        const barWidth = (canvas.width / bufferLength) * 1.5; let barHeight; let x = 0;
-        for (let i = 0; i < bufferLength; i++) {
-          barHeight = dataArray[i] / 4; ctx.fillStyle = 'rgba(59, 130, 246, ' + (barHeight / 60 + 0.1) + ')';
-          ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight); x += barWidth;
+      function render() {
+        visualizerAnim = requestAnimationFrame(render);
+        analyser.getByteFrequencyData(dataArray);
+        ctx.fillStyle = 'rgba(11, 15, 25, 0.2)';
+        ctx.fillRect(0, 0, v.width, v.height);
+
+        const barWidth = (v.width / bufferLength) * 2.5;
+        let x = 0;
+
+        for(let i = 0; i < bufferLength; i++) {
+          const barHeight = dataArray[i] / 4;
+          ctx.fillStyle = 'rgba(59, 130, 246, ' + (barHeight/40 + 0.2) + ')';
+          ctx.fillRect(x, v.height - barHeight, barWidth - 2, barHeight);
+          x += barWidth;
         }
       }
-      draw();
+      render();
+    }
+
+    // System Core Focus Pomo Engines
+    function updateTimerDisplay() {
+      const mins = Math.floor(time / 60).toString().padStart(2, '0');
+      const secs = (time % 60).toString().padStart(2, '0');
+      document.getElementById("timer").innerText = `${mins}:${secs}`;
+
+      const progressCircle = document.getElementById("timerCircle");
+      const offset = 565 - (565 * (time / timerDuration));
+      progressCircle.style.strokeDashoffset = offset;
     }
 
     function startTimer() {
       if (timer) return;
-      initAudioCtx();
-      if(audioCtx.state === 'suspended') audioCtx.resume();
-
+      checkAudioContext();
       timer = setInterval(() => {
-        if (time > 0) { time--; updateTimerDisplay(); } 
-        else {
-          clearInterval(timer); timer = null;
-          if(activeMode === 'work') {
-            sessionCount++; toast("Deep Focus Cycle Finished!");
-            let activeTask = tasks.find(t => t.status === 'progress' && !t.completed);
-            if(!activeTask) activeTask = tasks.find(t => t.status === 'todo' && !t.completed);
-            if(activeTask) {
-              activeTask.actualPomos = (activeTask.actualPomos || 0) + 1;
-              toast(`Logged segment metrics loop into: "${activeTask.text}"`);
-            }
-          } else { toast("Break complete. Re-engage performance stream pipeline."); }
-          
-          triggerAudioAlert(); saveStateToDatabase(); renderTasks(); setTimerMode('work');
+        if(time > 0) {
+          time--;
+          updateTimerDisplay();
+        } else {
+          handleTimerExpiry();
         }
       }, 1000);
     }
 
-    function pauseTimer() { clearInterval(timer); timer = null; }
-    function resetTimer() { pauseTimer(); time = timerDuration; updateTimerDisplay(); }
+    function pauseTimer() {
+      clearInterval(timer);
+      timer = null;
+    }
 
-    // Initialize Native Database Layer Execution Chain on Window Boot Up Load
-    window.addEventListener("DOMContentLoaded", () => {
+    function resetTimer() {
+      pauseTimer();
+      time = timerDuration;
+      updateTimerDisplay();
+    }
+
+    function handleTimerExpiry() {
+      pauseTimer();
+      if(activeMode === 'work') {
+        sessionCount++;
+        toast("Incremental Telemetry Checkpoint Logged");
+        
+        // Loop backward into current active stack items to update tracking weight metrics
+        if(tasks.length > 0) {
+          const activeTask = tasks.find(t => !t.completed);
+          if (activeTask) activeTask.actualPomos++;
+        }
+        setTimerMode('short');
+      } else {
+        toast("Relaxation run complete. Re-initializing working parameters.");
+        setTimerMode('work');
+      }
+      saveStateToDatabase();
+      renderTasks();
+      triggerAlertSignal();
+    }
+
+    function triggerAlertSignal() {
+      if(!document.getElementById("soundToggle").checked) return;
+      checkAudioContext();
+      let osc = audioCtx.createOscillator();
+      let alertGain = audioCtx.createGain();
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.15);
+      
+      alertGain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+      alertGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+      
+      osc.connect(alertGain);
+      alertGain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.4);
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
+    // Transaction Matrix Serialization Actions
+    function exportCSV() {
+      let rows = [["Task ID", "Task Content", "Due Date", "Subject Group", "Priority Weight", "Pomos Complete", "Pomos Target", "Checked State"]];
+      tasks.forEach(t => {
+        rows.push([t.id, `"${t.text.replace(/"/g, '""')}"`, t.dueDate, t.subject, t.priority, t.actualPomos, t.estimatedPomos, t.completed]);
+      });
+      
+      let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+      let encodedUri = encodeURI(csvContent);
+      let link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `StudyTracker_DataMatrix_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast("Spreadsheet Dataset Compiled Successfully");
+    }
+
+    function exportJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+        tasks, history, sessionCount, studyData, version: "3.0"
+      }));
+      let dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", `Backup_Config_Map_${Date.now()}.json`);
+      dlAnchorElem.click();
+      toast("Configuration JSON Matrix Array Backup Complete");
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          tasks = parsed.tasks || [];
+          history = parsed.history || [];
+          sessionCount = parsed.sessionCount || 0;
+          studyData = parsed.studyData || {};
+          
+          saveStateToDatabase();
+          populateSubjectDropdownFilter();
+          renderTasks();
+          toast("System Restored From JSON Core Map");
+        } catch(err) {
+          toast("Fatal mapping syntax parse errors during state extraction.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    window.onload = function() {
       initDatabase(() => {
         populateSubjectDropdownFilter();
         switchView(currentView);
         updateTimerDisplay();
       });
-    });
+    };
   </script>
 </body>
 </html>
