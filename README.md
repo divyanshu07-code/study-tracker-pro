@@ -4,7 +4,7 @@
 
 A high-performance, single-page web dashboard designed to track tasks, organize complex study workflows, and provide built-in focus tools using low-level browser APIs. 
 
-🔗 **[Launch the Live Workspace Dashboard](https://divyanshu07-code.github.io/study-tracker-core/)**
+🔗 **[Launch the Live Workspace Dashboard](https://divyanshu07-code.github.io/study-tracker-pro/)**
 
 ---
 
