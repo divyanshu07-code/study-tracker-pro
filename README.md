@@ -28,3 +28,5 @@ Simply click the live link at the top of this page to use the workspace instantl
 1. **Clone the repository** or download the `index.html` file directly to your machine:
    ```bash
    git clone [https://github.com/divyanshu07-code/study-tracker-core.git](https://github.com/divyanshu07-code/study-tracker-core.git)
+
+"If you find this useful, please star! ⭐"
