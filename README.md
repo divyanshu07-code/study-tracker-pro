@@ -29,4 +29,13 @@ Simply click the live link at the top of this page to use the workspace instantl
    ```bash
    git clone [https://github.com/divyanshu07-code/study-tracker-core.git](https://github.com/divyanshu07-code/study-tracker-core.git)
 
-"If you find this useful, please star! ⭐"
+   ```
+ ---
+Author
+Divyanshu
+
+Web Development Enthusiast | Problem Solver
+
+Thank you for visiting the repository.
+
+If you like this project, consider giving it a ⭐ and sharing your feedback.
