@@ -582,7 +582,6 @@
   </div>
 
   <script>
-    // System Architecture Config Data Elements
     let db = null;
     let tasks = [];
     let history = [];
@@ -590,13 +589,13 @@
     let studyData = {};
     let currentView = 'list';
 
-    // Timer Variables
+ 
     let timerDuration = 25 * 60;
     let time = 25 * 60;
     let timer = null;
     let activeMode = 'work';
 
-    // Web Audio Synthesizer Controls
+
     let audioCtx = null;
     let mainGainNode = null;
     let ambientNode = null;
@@ -613,7 +612,6 @@
     const colors = ["#dbeafe", "#dcfce7", "#fce7f3", "#ede9fe", "#fef3c7", "#fee2e2"];
     const textColors = ["#1d4ed8", "#166534", "#be185d", "#6d28d9", "#92400e", "#b91c1c"];
 
-    // ADVANCED ARCHITECTURE LAYER: Async Database (IndexedDB Pipeline Engine)
     function initDatabase(callback) {
       const request = indexedDB.open("NexusCoreDatabase", 1);
       
@@ -962,7 +960,7 @@
       document.getElementById("progressFill").style.width = efficiency + "%";
       document.getElementById("progressText").innerText = efficiency + "%";
 
-      // Render Ledger Updates
+      
       const historyBox = document.getElementById("history");
       historyBox.innerHTML = '';
       if(history.length === 0) historyBox.innerHTML = '<div style="color:var(--muted); font-size:13px; font-weight:600;">System logs currently idling...</div>';
@@ -975,7 +973,7 @@
         `;
       });
 
-      // Simple Analytics Insights Engine
+     
       const insightEl = document.getElementById("insight");
       if(total === 0) {
         insightEl.innerText = "Awaiting deployment parameters. Load metrics to populate algorithmic forecasting telemetry graphs.";
@@ -1048,7 +1046,6 @@
       }
     }
 
-    // Advanced Synthesizer Controls (Audio Infrastructure Layer)
     function checkAudioContext() {
       if(!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1151,7 +1148,7 @@
       render();
     }
 
-    // System Core Focus Pomo Engines
+   
     function updateTimerDisplay() {
       const mins = Math.floor(time / 60).toString().padStart(2, '0');
       const secs = (time % 60).toString().padStart(2, '0');
@@ -1191,8 +1188,8 @@
       if(activeMode === 'work') {
         sessionCount++;
         toast("Incremental Telemetry Checkpoint Logged");
+
         
-        // Loop backward into current active stack items to update tracking weight metrics
         if(tasks.length > 0) {
           const activeTask = tasks.find(t => !t.completed);
           if (activeTask) activeTask.actualPomos++;
@@ -1230,7 +1227,7 @@
       document.body.classList.toggle("dark");
     }
 
-    // Transaction Matrix Serialization Actions
+  
     function exportCSV() {
       let rows = [["Task ID", "Task Content", "Due Date", "Subject Group", "Priority Weight", "Pomos Complete", "Pomos Target", "Checked State"]];
       tasks.forEach(t => {
